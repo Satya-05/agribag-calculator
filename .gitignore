@@ -8,3 +8,5 @@ __pycache__/
 .streamlit/
 .env
 *.log
+backend/uploads/*
+backend/agribag.db
