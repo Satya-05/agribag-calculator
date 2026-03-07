@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriBag Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Background Elements -->
+    <div class="bg-grain"></div>
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">🌾</span>
+                <div class="logo-text">
+                    <h1>AgriBag</h1>
+                    <span>Calculator</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" onclick="showSection('upload')">New Entry</button>
+                <button class="nav-btn" onclick="showSection('records')">Records</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+
+        <!-- Upload Section -->
+        <section class="section" id="section-upload">
+
+            <div class="section-title">
+                <h2>New Weight Entry</h2>
+                <p>Upload a register page to extract weights automatically</p>
+            </div>
+
+            <div class="form-card">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Farmer Name</label>
+                        <input type="text" id="farmer-name" placeholder="Enter farmer name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="date" />
+                    </div>
+                </div>
+
+                <div class="upload-area" id="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-content">
+                        <div class="upload-icon">📷</div>
+                        <h3>Upload Register Page</h3>
+                        <p>Click to select image or drag and drop</p>
+                        <span>Supports JPG, PNG</span>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage()" />
+                </div>
+
+                <div id="preview-container" class="preview-container" hidden>
+                    <img id="image-preview" src="" alt="Preview" />
+                    <button class="btn-remove" onclick="removeImage()">✕ Remove</button>
+                </div>
+
+                <button class="btn-primary" id="calculate-btn" onclick="uploadImage()" hidden>
+                    <span class="btn-text">Extract & Calculate</span>
+                    <span class="btn-icon">→</span>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- Loading Section -->
+        <section class="section" id="section-loading" hidden>
+            <div class="loading-card">
+                <div class="loading-animation">
+                    <div class="loading-ring"></div>
+                    <div class="loading-grain">🌾</div>
+                </div>
+                <h3>Reading Handwritten Values...</h3>
+                <p>Our AI is extracting weights from your register</p>
+                <div class="loading-steps">
+                    <div class="step active" id="step1">📷 Processing image</div>
+                    <div class="step" id="step2">🤖 Reading values</div>
+                    <div class="step" id="step3">🧮 Calculating sums</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="section" id="section-results" hidden>
+
+            <div class="section-title">
+                <h2>Extracted Values</h2>
+                <p>Review and correct any values if needed, then confirm</p>
+            </div>
+
+            <div class="farmer-badge">
+                <span>👨‍🌾</span>
+                <div>
+                    <strong id="result-farmer"></strong>
+                    <span id="result-date"></span>
+                </div>
+            </div>
+
+            <!-- Editable Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <span>Edit any incorrect values directly in the table</span>
+                    <button class="btn-recalculate" onclick="recalculate()">🔄 Recalculate</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="results-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Column 1 (KG)</th>
+                                <th>S.No</th>
+                                <th>Column 2 (KG)</th>
+                                <th>S.No</th>
+                                <th>Column 3 (KG)</th>
+                                <th>S.No</th>
+                                <th>Column 4 (KG)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                        <tfoot>
+                            <tr class="sum-row">
+                                <td colspan="2" id="col1-sum-cell">Col 1: <strong>0</strong> kg</td>
+                                <td colspan="2" id="col2-sum-cell">Col 2: <strong>0</strong> kg</td>
+                                <td colspan="2" id="col3-sum-cell">Col 3: <strong>0</strong> kg</td>
+                                <td colspan="2" id="col4-sum-cell">Col 4: <strong>0</strong> kg</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Total -->
+            <div class="total-card">
+                <div class="total-label">Total Weight</div>
+                <div class="total-value" id="total-value">0 kg</div>
+                <div class="total-sub">Sum of all 4 columns</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-secondary" onclick="resetForm()">← New Entry</button>
+                <button class="btn-primary" onclick="confirmAndSave()">
+                    <span class="btn-text">Confirm & Save</span>
+                    <span class="btn-icon">✓</span>
+                </button>
+            </div>
+
+        </section>
+
+        <!-- Records Section -->
+        <section class="section" id="section-records" hidden>
+
+            <div class="section-title">
+                <h2>Previous Records</h2>
+                <p>All saved farmer weight records</p>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="🔍 Search by farmer name..." oninput="filterRecords()" />
+            </div>
+
+            <div id="records-container">
+                <div class="empty-state">
+                    <p>🌾 No records yet</p>
+                    <span>Start by adding a new entry</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
