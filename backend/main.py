@@ -21,6 +21,7 @@ init_db()
 
 # Uploads folder path
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.get("/")
 def home():
