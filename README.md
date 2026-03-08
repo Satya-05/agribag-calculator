@@ -6,6 +6,20 @@ An AI-powered web application that extracts handwritten weight values from paddy
 
 ---
 
+## 📸 Screenshots
+
+### Upload Page
+![Upload Page](assets/upload.png)
+
+### Extracted Values & Manual Correction
+![Results 1](assets/results1.png)
+![Results 2](assets/results2.png)
+
+### Records
+![Records](assets/records.png)
+
+---
+
 ## 📌 Problem Statement
 
 Paddy trading businessmen maintain handwritten weight registers with 60 values across 4 columns and 15 rows each. Manually adding all values is time-consuming and error-prone. AgriBag Calculator automates this by reading the register page photo and instantly calculating all sums.
@@ -19,6 +33,7 @@ Paddy trading businessmen maintain handwritten weight registers with 60 values a
 - ✏️ **Manual Correction** — Editable table to fix any misread values before saving
 - 🔄 **Live Recalculate** — Instantly recalculates sums when values are edited
 - 💾 **Save Records** — Stores farmer name, date, column sums and total in a database
+- 🗑️ **Delete Records** — Delete settled records to keep the list clean
 - 🔍 **Search Records** — Search past records by farmer name
 - 📱 **Responsive Design** — Works on mobile and desktop
 
@@ -56,6 +71,7 @@ AGRI-BAG-CALCULATOR/
 │   ├── script.js            # Frontend logic
 │   └── style.css            # Styling
 │
+├── assets/                  # Screenshots
 ├── .gitignore
 └── README.md
 ```
@@ -119,6 +135,7 @@ http://127.0.0.1:5500
 | GET | `/` | Health check |
 | POST | `/process-image` | Upload image and extract values |
 | POST | `/save-record` | Save a farmer record |
+| DELETE | `/records/{id}` | Delete a record by ID |
 | GET | `/records` | Get all records |
 | GET | `/records/{farmer_name}` | Get records by farmer name |
 
@@ -144,5 +161,3 @@ Uses **Groq API** with **Llama 4 Scout 17B Vision** model for handwriting recogn
 - Dot notation decimals (76·2 → 76.2)
 - Empty cells (returns 0)
 - Cancelled/crossed values (returns 0)
-
----
