@@ -151,6 +151,9 @@ The app reads registers with this layout:
 
 Total = Col1 + Col2 + Col3 + Col4
 
+### Sample Register Image
+![Sample Register](assets/sample-register.png)
+
 ---
 
 ## 🤖 AI Model
