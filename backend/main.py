@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form, Request
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
-from database import init_db, save_record, get_all_records, get_farmer_records
+from database import init_db, save_record, get_all_records, get_farmer_records, delete_record
 from image_processor import process_page
 
 # Initialize FastAPI app
@@ -34,14 +34,12 @@ async def process_image(
     date: str = Form(...)
 ):
     try:
-        # Save uploaded image to uploads folder
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         with open(file_path, "wb") as f:
             shutil.copyfileobj(file.file, f)
 
         print(f"Image saved: {file_path}")
 
-        # Process the image
         result = process_page(file_path)
 
         if result["success"]:
@@ -49,7 +47,6 @@ async def process_image(
             result["date"] = date
             print(f"Image processed for farmer: {farmer_name}")
 
-        # Cleanup uploaded image
         os.remove(file_path)
 
         return result
@@ -78,6 +75,16 @@ async def save_record_endpoint(request: Request):
 
     except Exception as e:
         print(f"Error saving record: {e}")
+        return {"success": False, "error": str(e)}
+
+@app.delete("/records/{record_id}")
+async def delete_record_endpoint(record_id: int):
+    try:
+        delete_record(record_id)
+        return {"success": True}
+
+    except Exception as e:
+        print(f"Error deleting record: {e}")
         return {"success": False, "error": str(e)}
 
 @app.get("/records")
@@ -123,4 +130,3 @@ def get_farmer(farmer_name: str):
 
     except Exception as e:
         return {"success": False, "error": str(e)}
-    

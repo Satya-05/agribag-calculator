@@ -45,6 +45,15 @@ def save_record(farmer_name, date, total_weight, column_sums):
     conn.commit()
     conn.close()
 
+def delete_record(record_id):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    cursor.execute('DELETE FROM farmers WHERE id = ?', (record_id,))
+    
+    conn.commit()
+    conn.close()
+
 def get_all_records():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()

@@ -196,6 +196,7 @@ async function loadRecords() {
     }
 }
 
+
 function renderRecords(records) {
     const container = document.getElementById('records-container');
     if (records.length === 0) {
@@ -213,8 +214,9 @@ function renderRecords(records) {
                     <div class="record-name">👨‍🌾 ${r.farmer_name}</div>
                     <div class="record-date">📅 ${r.date}</div>
                 </div>
-                <div>
+                <div style="display:flex; align-items:center; gap:16px;">
                     <div class="record-total">${r.total_weight} <span>kg total</span></div>
+                    <button onclick="deleteRecord(${r.id})" style="background:#fee2e2; border:none; color:#dc2626; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;">🗑 Delete</button>
                 </div>
             </div>
             <div class="record-cols">
@@ -237,6 +239,24 @@ function renderRecords(records) {
             </div>
         </div>
     `).join('');
+}
+
+async function deleteRecord(id) {
+    if (!confirm('Are you sure you want to delete this record?')) return;
+    try {
+        const response = await fetch(`${API_URL}/records/${id}`, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        if (result.success) {
+            showToast('✅ Record deleted!');
+            loadRecords();
+        } else {
+            showToast('❌ Error deleting record!');
+        }
+    } catch (error) {
+        showToast('❌ Could not connect to server!');
+    }
 }
 
 function filterRecords() {
