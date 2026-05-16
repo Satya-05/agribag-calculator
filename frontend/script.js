@@ -31,6 +31,41 @@ function removeImage() {
     document.getElementById('upload-area-gallery').hidden = false;
     document.getElementById('upload-area-camera').hidden = false;
 }
+
+function compressImage(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Max 1200px on longest side
+                if (width > height && width > 1200) {
+                    height = (height * 1200) / width;
+                    width = 1200;
+                } else if (height > 1200) {
+                    width = (width * 1200) / height;
+                    height = 1200;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                }, 'image/jpeg', 0.8);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
 async function uploadImage() {
     const farmerName = document.getElementById('farmer-name').value.trim();
     const date = document.getElementById('date').value;
@@ -47,8 +82,9 @@ async function uploadImage() {
     animateLoadingSteps();
 
     try {
+        const compressedFile = await compressImage(file);
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', compressedFile);
         formData.append('farmer_name', farmerName);
         formData.append('date', date);
 
