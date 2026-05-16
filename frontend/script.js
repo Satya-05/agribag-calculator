@@ -333,3 +333,9 @@ function showToast(message) {
 }
 
 document.getElementById('date').valueAsDate = new Date();
+
+// Keep Render server awake every 14 minutes
+setInterval(() => {
+    fetch(`${API_URL}/`)
+        .catch(() => {}); // silent ping
+}, 14 * 60 * 1000);
