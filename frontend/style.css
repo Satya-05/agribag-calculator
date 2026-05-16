@@ -822,3 +822,21 @@ tbody td input:focus {
         width: 65px;
     }
 }
+
+/* Upload Options */
+.upload-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.upload-options .upload-area {
+    margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+    .upload-options {
+        grid-template-columns: 1fr;
+    }
+}

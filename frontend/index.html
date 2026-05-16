@@ -55,15 +55,24 @@
                     </div>
                 </div>
 
-                <div class="upload-area" id="upload-area" onclick="document.getElementById('fileInput').click()">
-                    <div class="upload-content">
-                        <div class="upload-icon">📷</div>
-                        <h3>Upload Register Page</h3>
-                        <p>Click to select image or drag and drop</p>
-                        <span>Supports JPG, PNG</span>
-                    </div>
-                    <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage()" />
-                </div>
+                <div class="upload-options">
+    <div class="upload-area" id="upload-area-gallery" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-content">
+            <div class="upload-icon">🖼️</div>
+            <h3>Upload from Gallery</h3>
+            <p>Select an existing image</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" hidden onchange="previewImage()" />
+    </div>
+    <div class="upload-area" id="upload-area-camera" onclick="document.getElementById('cameraInput').click()">
+        <div class="upload-content">
+            <div class="upload-icon">📷</div>
+            <h3>Take a Photo</h3>
+            <p>Capture using camera</p>
+        </div>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden onchange="previewImage()" />
+    </div>
+</div>
 
                 <div id="preview-container" class="preview-container" hidden>
                     <img id="image-preview" src="" alt="Preview" />

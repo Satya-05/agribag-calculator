@@ -11,26 +11,32 @@ function showSection(name) {
 }
 
 function previewImage() {
-    const file = document.getElementById('fileInput').files[0];
+    const galleryFile = document.getElementById('fileInput').files[0];
+    const cameraFile = document.getElementById('cameraInput').files[0];
+    const file = galleryFile || cameraFile;
     if (!file) return;
     document.getElementById('image-preview').src = URL.createObjectURL(file);
     document.getElementById('preview-container').hidden = false;
     document.getElementById('calculate-btn').hidden = false;
-    document.getElementById('upload-area').hidden = true;
+    document.getElementById('upload-area-gallery').hidden = true;
+    document.getElementById('upload-area-camera').hidden = true;
 }
 
 function removeImage() {
     document.getElementById('fileInput').value = '';
+    document.getElementById('cameraInput').value = '';
     document.getElementById('image-preview').src = '';
     document.getElementById('preview-container').hidden = true;
     document.getElementById('calculate-btn').hidden = true;
-    document.getElementById('upload-area').hidden = false;
+    document.getElementById('upload-area-gallery').hidden = false;
+    document.getElementById('upload-area-camera').hidden = false;
 }
-
 async function uploadImage() {
     const farmerName = document.getElementById('farmer-name').value.trim();
     const date = document.getElementById('date').value;
-    const file = document.getElementById('fileInput').files[0];
+    const galleryFile = document.getElementById('fileInput').files[0];
+    const cameraFile = document.getElementById('cameraInput').files[0];
+    const file = galleryFile || cameraFile;
 
     if (!farmerName) { showToast('⚠️ Please enter farmer name!'); return; }
     if (!date) { showToast('⚠️ Please select a date!'); return; }
