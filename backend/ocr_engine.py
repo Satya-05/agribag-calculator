@@ -31,7 +31,8 @@ def extract_values_from_image(image_path):
         
         # Send to Groq
         response = client.chat.completions.create(
-            model="qwen/qwen3-32b",
+            model="qwen/qwen3.6-27b",
+            reasoning_effort="none", 
             messages=[
                 {
                     "role": "user",
@@ -82,6 +83,8 @@ Return ONLY a JSON object, no extra text:
         print(f"Groq response: {response_text}")
         
         # Clean response
+        # Clean response
+        response_text = re.sub(r'<think>.*?</think>', '', response_text, flags=re.DOTALL).strip()
         response_text = re.sub(r'```json|```', '', response_text).strip()
         
         # Parse JSON
