@@ -31,7 +31,7 @@ def extract_values_from_image(image_path):
         
         # Send to Groq
         response = client.chat.completions.create(
-            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            model="qwen/qwen3-32b",
             messages=[
                 {
                     "role": "user",
